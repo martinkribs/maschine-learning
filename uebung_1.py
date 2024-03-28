@@ -12,6 +12,7 @@ print(file.isnull().sum())
 print()
 file.dropna(axis=0, how="all")
 
+
 # 4
 print()
 file.median()
