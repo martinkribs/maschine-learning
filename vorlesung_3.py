@@ -46,7 +46,7 @@ print(file.describe().round(1))
 # plt.xlabel(["Duration"],["Puls"],["Maxpulse"],["Calories"])
 # plt.show()
 
-# Berechnung der
+# Berechnung der Korrelation
 print()
 print(file.corr(method="spearman").round(2))
 
