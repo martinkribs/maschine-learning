@@ -1,8 +1,9 @@
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.feature_selection import SequentialFeatureSelector
 
 # Datei einlesen und Spalten umbenennen
 file = pd.read_csv(
@@ -39,7 +40,18 @@ print("Verhältnis Test M/B: ", y_test.value_counts())
 
 # Training logistische Regression
 model = LogisticRegression().fit(X_train, y_train)
-# Testdatensatz fü Vorhersage
+
+# Feature Selection
+sfs = SequentialFeatureSelector(model)
+sfs.fit(X_train, y_train)
+index = X_train.columns[sfs.get_support()]
+X_train = X_train[index]
+X_test = X_test[index]
+
+# Erneutes Training des Modells
+model = LogisticRegression().fit(X_train, y_train)
+
+# Vorhersage auf Testdatensatz
 y_pred = model.predict(X_test)
 
 # Ausgaben
@@ -51,3 +63,5 @@ print(y_pred)
 # Evaluation
 print("\nKonfusionsmatrix:")
 print(confusion_matrix(y_test, y_pred))
+print("\nAbgeleitete Metriken:")
+print(classification_report(y_test, y_pred))
